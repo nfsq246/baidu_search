@@ -8,4 +8,4 @@
 
 ![image](ex.png)
 
-参考了[他](https://github.com/windycn/Baidu_Html-css)和他[他](https://github.com/t1amo22/baidu_search)
+参考了[他](https://github.com/windycn/Baidu_Html-css)和[他](https://github.com/t1amo22/baidu_search)
