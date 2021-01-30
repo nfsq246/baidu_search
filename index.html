@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度一下，你就知道</title>
+    <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/public.css">
+    <link rel="stylesheet" href="./css/baidu.css">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container"  id="searchHide">
+        <main>
+            <div class="layout main_flex">
+                <div class="logo_img">
+                    <image class="" src="./img/baidulogo.png" width="270" height="129"></image>
+                </div>
+                <div id="search" >
+                    <div class="baidu_search">
+                        <input type="text" class="baidu_input" id="searchMsg"></input>
+                        <button class="baidu_button" id="btn">
+                            <strong class="baiduSearch" >百度一下</strong>
+                        </button>
+                    </div>
+            
+                        <ul id="list" class="bdsug"  style="display: none;">
+                            <li></li>
+                        </ul>
+            
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        var searchMsg = document.getElementById("searchMsg");
+        var list = document.getElementById("list");
+        var btn = document.getElementById("btn");
+        var searchHide = document.getElementById("searchHide");
+        var search = document.getElementById("search");
+        var out = true
+  
+        //监听输入框的keuup事件，
+        searchMsg.onkeyup = function(e){
+            if (this.value) {
+                if (e.keyCode == 13){
+                    location.href = "https://www.baidu.com/s?wd=" + searchMsg.value
+                }else{
+                    show(list,searchMsg);
+                    // 动态创建script标签，使用百度提供的接口，将查询字符串编码后，写到src当中
+                    var s = document.createElement('script');
+                    s.src = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=' + encodeURI(this.value.trim()) + '&json=1&p=3&sid=1457_21105_17001_22158&req=2&csor=1&pwd=7&cb=fn';
+                    // 插入到文档后获取jsonp格式的数据，然后调用callback函数，将data数据以参数的形式传入
+                    document.body.appendChild(s);
+                }
+
+            } else {
+                hide(list,searchMsg);
+            }
+        }
+        searchMsg.onclick = function(){
+            if (this.value) {
+                show(list,searchMsg);
+                // 动态创建script标签，使用百度提供的接口，将查询字符串编码后，写到src当中
+                var s = document.createElement('script');
+                s.src = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=' + encodeURI(this.value.trim()) + '&json=1&p=3&sid=1457_21105_17001_22158&req=2&csor=1&pwd=7&cb=fn';
+                // 插入到文档后获取jsonp格式的数据，然后调用callback函数，将data数据以参数的形式传入
+                document.body.appendChild(s);
+            } else {
+                hide(list,searchMsg);
+            }
+        }
+
+        searchHide.onclick = function() {
+            if (out) {
+                list.style.display = "none"
+                searchMsg.style.borderColor = "#a7aab5"
+                searchMsg.style.borderBottom = "2px solid  #a7aab5"
+                searchMsg.style.borderRadius = "10px 0 0 10px"
+            }
+        }
+        search.onmouseenter = function () {
+            out = false
+        }
+        search.onmouseleave = function () {
+            out = true
+        }
+        //点击百度一下按钮跳转到相应的页面
+        btn.onclick = function() {
+            location.href = "https://www.baidu.com/s?wd=" + searchMsg.value
+        }
+    
+    
+        function fn(data) {
+            
+            //这时候遍历查询到的信息，放到li标签当中
+            list.innerHTML="";//清空
+            data.s.forEach(function(item, index) {
+                
+                var lis = document.createElement("li");
+                lis.innerHTML = "<a href='https://www.baidu.com/s?wd="+item+"' style='display:block'>"+item+"</a>";
+                list.appendChild(lis);
+            
+            
+            });
+            if (data.s.length == 0){
+                hide(list,searchMsg);
+            }else{
+                show(list,searchMsg);
+            }
+
+            // 获取到数据后，把脚本删除
+            var s = document.querySelectorAll('script');
+            for (var i = 1, len = s.length; i < len; i++) {
+                document.body.removeChild(s[i]);
+            }
+        }
+    
+        function hide(obj,obj2) {
+            obj.style.display = "none"
+            obj2.style.borderColor = "#4e6ef2"
+            obj2.style.borderBottom = "2px solid  #4e6ef2"
+            obj2.style.borderRadius = "10px 0 0 10px"
+            
+        }
+    
+        function show(obj,obj2) {
+            obj.style.display = "block"
+            obj2.style.borderColor = "#4e6ef2"
+            obj2.style.borderBottom = "2px dashed #8a8a8a"
+            obj2.style.borderRadius = "10px 0 0 0px"
+        
+        }
+        </script>
+</body>
+
+</html>
